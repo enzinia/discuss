@@ -18,7 +18,9 @@ defmodule Discuss.TopicController do
   end
 
   def create(conn, %{"topic" => topic_params}) do
-    changeset = Topic.changeset %Topic{}, topic_params
+    changeset = conn.assigns.user
+                |> build_assoc(:topics)
+                |> Topic.changeset(topic_params)
 
     case Repo.insert(changeset) do
       {:ok, _topic} ->
